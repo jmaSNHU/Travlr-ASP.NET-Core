@@ -20,7 +20,7 @@ namespace Travlr.WebApi.Mappings
         /// <returns></returns>
         public static TripDto ToDto(this Trip trip)
         {
-            if (trip == null) return null;
+            if (trip == null) return null!;
 
             return new TripDto
             {
@@ -49,7 +49,7 @@ namespace Travlr.WebApi.Mappings
         /// <returns></returns>
         public static Trip ToEntity(this TripDto tripDto)
         {
-            if (tripDto == null) return null;
+            if (tripDto == null) return null!;
 
             return new Trip
             {

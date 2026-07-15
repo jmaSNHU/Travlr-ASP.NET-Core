@@ -7,22 +7,22 @@ namespace Travlr.WebApi.Dtos
     /// </summary>
     public class TripDto
     {
-        public string Code { get; set; }
+        public string Code { get; set; } = null!;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public string Length { get; set; }
+        public string Length { get; set; } = null!;
 
         public DateTime Start { get; set; }
 
-        public string Resort { get; set; }
+        public string Resort { get; set; } = null!; 
 
         // price per person stored as a string
-        public string PerPerson { get; set; }
+        public string PerPerson { get; set; } = null!;
 
         // file path to an image resource
-        public string Image { get; set; }
+        public string Image { get; set; } = null!;
 
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
     }
 }
