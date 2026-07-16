@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Travlr.WebApi.UnitTests/Travlr.WebApi.UnitTests.csproj" Id="6c525544-6b08-4d89-984f-d43fadcf9feb" />
   <Project Path="Travlr.WebApi/Travlr.WebApi.csproj" />
 </Solution>
