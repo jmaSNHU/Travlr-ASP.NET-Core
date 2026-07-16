@@ -1,0 +1,6 @@
+@Travlr.WebApi_HostAddress = http://localhost:5211
+
+GET {{Travlr.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
