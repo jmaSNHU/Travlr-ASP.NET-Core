@@ -12,7 +12,7 @@ namespace Travlr.WebApi.Controllers
     [Route("api/[controller]")]
     public class TripsController : ControllerBase
     {
-        private ITripsService _tripsService;
+        private readonly ITripsService _tripsService;
 
         // dependency injection provides the implementation of ITripsService
         public TripsController(ITripsService tripsService) => _tripsService = tripsService;
