@@ -10,7 +10,10 @@ namespace Travlr.WebApi.Models
     public class Trip
     {
         [BsonId]
+        // prevents attempt to update a trip w/ null ID
+        [BsonIgnoreIfNull] 
         [BsonRepresentation(BsonType.ObjectId)]
+        // ID is hidden from DTO, but may be used with business logic
         public string Id { get; set; } = null!;
 
         // These properties are required to create a new document
