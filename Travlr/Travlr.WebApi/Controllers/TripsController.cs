@@ -58,6 +58,8 @@ namespace Travlr.WebApi.Controllers
         public async Task<ActionResult<TripDto>> Create([FromForm] TripDto trip)
         {
             await _tripsService.CreateAsync(trip);
+            // produces a 201 created response
+            // uses the [GET] method to fetch the newly created Trip
             return CreatedAtAction(nameof(Get), new { code = trip.Code }, trip);
         }
         
