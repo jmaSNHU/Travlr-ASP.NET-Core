@@ -11,7 +11,7 @@ namespace Travlr.WebApi.Services
         public Task<List<TripDto>> GetAsync();
         public Task<TripDto?> GetAsync(string code);
         public Task CreateAsync(TripDto trip);
-        public Task<TripDto> UpdateAsync(string code,  TripDto trip);
+        public Task<TripDto?> UpdateAsync(string code,  TripDto trip);
         public Task RemoveAsync(string code);
     }
 }

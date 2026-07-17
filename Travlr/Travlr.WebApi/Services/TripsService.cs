@@ -39,10 +39,13 @@ namespace Travlr.WebApi.Services
             await _tripsCollection.InsertOneAsync(trip.ToEntity());
 
         // updates an existing trip
-        public async Task<TripDto> UpdateAsync(string code, TripDto trip)
+        public async Task<TripDto?> UpdateAsync(string code, TripDto trip)
         {
-            await _tripsCollection.ReplaceOneAsync(x => x.Code == code, trip.ToEntity());
-            return trip;
+            var result = await _tripsCollection.ReplaceOneAsync(x => x.Code == code, trip.ToEntity());
+            if (result.MatchedCount != 0)
+                return await GetAsync(trip.Code);
+            else
+                return null;
         }
 
         // deletes an existing trip
