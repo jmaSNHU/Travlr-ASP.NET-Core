@@ -73,7 +73,13 @@ namespace Travlr.WebApi.Controllers
         [HttpPut("{code}")]
         public async Task<ActionResult<TripDto>> Update(string code,[FromForm] TripDto trip)
         {
-            await _tripsService.UpdateAsync(code, trip);
+            var updatedTrip = await _tripsService.UpdateAsync(code, trip);
+
+            if (updatedTrip == null)
+            {
+                return NotFound();
+            }
+
             return Ok(trip);
         }
 
@@ -85,8 +91,16 @@ namespace Travlr.WebApi.Controllers
         [HttpDelete("{code}")]
         public async Task<ActionResult> Delete(string code)
         {
+            var trip = await _tripsService.GetAsync(code);
+
+            // return NotFound result if trip doesn't exist
+            if (trip == null)
+            {
+                return NotFound();
+            }
+
             await _tripsService.RemoveAsync(code);
-            return NoContent();
+            return NoContent(); // returns NoContent result after deletion
         }
     }
 }

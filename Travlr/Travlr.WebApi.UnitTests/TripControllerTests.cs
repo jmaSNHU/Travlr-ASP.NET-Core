@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Text;
 using Travlr.WebApi.Controllers;
 using Travlr.WebApi.Dtos;
 using Travlr.WebApi.Services;
+using Travlr.WebApi.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -51,6 +53,141 @@ namespace Travlr.WebApi.UnitTests
             Assert.Equal(2, returnedTrips.Count()); // expect 2 trips in the list
         }
 
-        // TODO: more testing!!!
+        [Fact]
+        public async Task TestGetExpectOkAndSingleTrip()
+        {
+            // Arrange
+            var trip = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+
+            _mockTripsService
+                .Setup(s => s.GetAsync("A"))
+                .ReturnsAsync(trip);
+
+            // Act
+            var actionResult = await _controller.Get("A");
+
+            // Assert
+            var resultOk = Assert.IsType<OkObjectResult>(actionResult.Result);
+            var returnedTrip = Assert.IsAssignableFrom<TripDto>(resultOk.Value);
+            Assert.Equal("A", returnedTrip.Code);
+        }
+
+        [Fact]
+        public async Task TestGetExpectNotFound()
+        {
+            // Arrange
+            var trip = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+
+            _mockTripsService
+                .Setup(s => s.GetAsync("B"))
+                .ReturnsAsync(trip);
+
+            // Act
+            var actionResult = await _controller.Get("A");
+
+            // Assert
+            var resultOk = Assert.IsType<NotFoundResult>(actionResult.Result);
+        }
+
+        [Fact]
+        public async Task TestCreateTrip()
+        {
+            // Arrange
+            var newTrip = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+
+            _mockTripsService
+                .Setup(s => s.CreateAsync(newTrip))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var actionResult = await _controller.Create(newTrip);
+
+            // Assert
+            var resultCreated = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
+            Assert.Equal(nameof(_controller.Get), resultCreated.ActionName);
+            Assert.Equal("A", resultCreated.RouteValues?["code"]);
+
+            var createdTrip = Assert.IsType<TripDto>(resultCreated.Value);
+            Assert.Equal("A", createdTrip.Code);
+            Assert.Equal("A Trip", createdTrip.Name);
+            Assert.Equal("A Trip Desc.", createdTrip.Description);
+            Assert.Equal("1 day", createdTrip.Length);
+            Assert.Equal("A resort", createdTrip.Resort);
+            Assert.Equal("a_img.jpg", createdTrip.Image);
+            Assert.Equal("1200.00", createdTrip.PerPerson);
+        }
+
+        [Fact]
+        public async Task TestUpdateTrip()
+        {
+            // Arrange
+            // Arrange
+            var tripToUpdate = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+            _mockTripsService
+                .Setup(s => s.UpdateAsync("A", tripToUpdate))
+                .ReturnsAsync(tripToUpdate);
+
+            // Act
+            tripToUpdate.Name = "AAA Trip";
+            var actionResult = await _controller.Update("A", tripToUpdate);
+
+            // Assert
+            var resultOk = Assert.IsType<OkObjectResult>(actionResult.Result);
+            var returnedTrip = Assert.IsAssignableFrom<TripDto>(resultOk.Value);
+        }
+
+        [Fact]
+        public async Task TestUpdateTripNotFound()
+        {
+            // Arrange
+            var tripToUpdate = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+
+            // Act
+            tripToUpdate.Name = "AAA Trip";
+            // try to update a non-existant trip
+            var actionResult = await _controller.Update("B", tripToUpdate);
+            var test = actionResult.Value;
+            if (test != null)
+            {
+                _output.WriteLine(test.Resort);
+            }
+
+            // Assert
+            Assert.IsType<NotFoundResult>(actionResult.Result);
+        }
+
+        [Fact]
+        public async Task TestDeleteTrip()
+        {
+            // Arrange
+            var tripToRemove = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+            _mockTripsService
+                .Setup(s => s.GetAsync(tripToRemove.Code))
+                .ReturnsAsync(tripToRemove);
+            _mockTripsService
+                .Setup(s => s.RemoveAsync(tripToRemove.Code))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _controller.Delete(tripToRemove.Code);
+
+            //Assert
+            Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public async Task TestDeleteTripNotFound()
+        {
+            // Arrange
+            _mockTripsService
+                .Setup(s => s.GetAsync("A"))
+                .ReturnsAsync((TripDto)null!);
+
+            // Act
+            var result = await _controller.Delete("A");
+
+            //Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
     }
 }
