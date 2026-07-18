@@ -12,15 +12,6 @@ aria-expanded="false" aria-label="Toggle navigation">
 sr-only ">(current)</span></a>
         </div>
     </div>
-    <!-- <div class="navbar-end ">
-        <a class="nav-item" routerLink="login" *ngIf="!isLoggedIn()">
-        <span class="has-icon-left">Log In</span>
-        </a>
-        <a class="nav-item active" (click)="onLogout()"
-*ngIf="isLoggedIn()">
-        <span class="has-icon-left ">Log Out</span>
-        </a>
-    </div> -->
     <div class="auth-buttons">
         <ng-container *ngIf="!isLoggedIn()">
             <button class="btn btn-primary" routerLink="login">Login</button>
