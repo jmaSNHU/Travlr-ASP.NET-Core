@@ -25,6 +25,7 @@ namespace Travlr.WebApi.Mappings
             return new TripDto
             {
                 // map Trip properties to TripDto properties
+                Id = trip.Id,
                 Code = trip.Code,
                 Name = trip.Name,
                 Length = trip.Length,
@@ -54,6 +55,7 @@ namespace Travlr.WebApi.Mappings
             return new Trip
             {
                 // map dto properties to model
+                Id = tripDto.Id,
                 Code = tripDto.Code,
                 Name = tripDto.Name,
                 Length = tripDto.Length,

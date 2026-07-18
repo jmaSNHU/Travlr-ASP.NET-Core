@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace Travlr.WebApi.Dtos
 {
@@ -7,6 +8,8 @@ namespace Travlr.WebApi.Dtos
     /// </summary>
     public class TripDto
     {
+        [JsonPropertyName("_id")]
+        public string Id { get; set; } = null!;
         public string Code { get; set; } = null!;
 
         public string Name { get; set; } = null!;
