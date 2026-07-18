@@ -18,7 +18,10 @@ builder.Services.Configure<TravlrDatabaseSettings>(
 // load JWT settings from appsettings.json
 var mongoDbSettings = builder.Configuration.GetSection("TravlrDatabase");
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
+
+// See README on how to configure user secret store
+var jwtSecret = builder.Configuration["JwtSettings:Secret"];
+var key = Encoding.ASCII.GetBytes(jwtSecret!);
 
 // 2. Configure MongoDB Identity
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>

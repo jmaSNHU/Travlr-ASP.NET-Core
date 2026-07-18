@@ -22,7 +22,7 @@ namespace Travlr.WebApi.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] RegisterDto model)
         {
             var userExists = await _userManager.FindByEmailAsync(model.Email);

@@ -15,29 +15,27 @@ namespace Travlr.WebApi.Models
         // this is the username field
         [BsonRequired]
         [BsonElement("email")]
-        public override string? Email
-        {
-            get => base.Email;
-            set
-            {
-                base.Email = value;
-                // Sync with normalized fields used by Identity
-                base.NormalizedEmail = value?.ToUpperInvariant();
-            }
-        }
+        public override string? Email { get; set; }
+        //{
+        //    get => base.Email;
+        //    set
+        //    {
+        //        base.Email = value;
+        //        // Sync with normalized fields used by Identity
+        //        base.NormalizedEmail = value?.ToUpperInvariant();
+        //    }
+        //}
 
         [BsonRequired]
         [BsonElement("name")]
         public string Name { get; set; } = null!;
 
-        // random salt value to prevent duplicate passwords
-        [BsonRequired]
-        [BsonElement("salt")]
-        public string Salt { get; set; } = null!;
-
         // password hash
+        // Note: Identity defaults to 100,000 iterations
+        // and automatically computes the salt value, 
+        // and stores it in the hash field.
         [BsonRequired]
         [BsonElement("hash")]
-        public string Hash { get; set; } = null!;
+        public override string? PasswordHash { get; set; } = null!;
     }
 }

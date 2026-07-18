@@ -8,14 +8,11 @@ namespace Travlr.WebApi.Dtos
     public class ApplicationUserDto
     {
         // this is the username field
-        public string Email { get; set; } = null!;
+        public string? Email { get; set; } = null!;
 
         public string Name { get; set; } = null!;
 
-        // random salt value to prevent duplicate passwords
-        public string Salt { get; set; } = null!;
-
         // password hash
-        public string Hash { get; set; } = null!;
+        public string? Hash { get; set; } = null!;
     }
 }

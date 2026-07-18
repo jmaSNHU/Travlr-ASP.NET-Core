@@ -28,8 +28,7 @@ namespace Travlr.WebApi.Mappings
             {
                 Email = user.Email,
                 Name = user.Name,
-                Salt = user.Salt,
-                Hash = user.Hash
+                Hash = user.PasswordHash        
             };
         }
 
@@ -49,8 +48,7 @@ namespace Travlr.WebApi.Mappings
             {
                 Email = userDto.Email,
                 Name = userDto.Name,
-                Salt = userDto.Salt,
-                Hash = userDto.Hash
+                PasswordHash = userDto.Hash
             };
         }
     }
