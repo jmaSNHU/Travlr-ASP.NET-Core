@@ -22,3 +22,17 @@ A repository for the Travlr application, ported to an ASP.NET Core Web API
 
 ### CD into Frontend/app_admin directory and install packages for Angular project
 ```npm install```
+
+# Running the Projects
+
+## API .NET Core WebApi
+Run or deploy from Visual Studio
+
+## Node.js Customer-Facing Frontend
+CD into the Frontend project directory:
+```set DEBUG=Frontend:*```
+```npm start```
+
+## Angular App Admin
+CD into the Frontend/app_admin directory:
+```ng serve```
