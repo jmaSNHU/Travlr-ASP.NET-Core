@@ -55,6 +55,10 @@ export class AuthenticationService {
     }
   }
 
+  public isRegistered() : boolean {
+    return this.authResp.isSuccess;
+  }
+
   // retrieve current user
   // should only be called after calling isLoggedIn()
   public getCurrentUser(): User {

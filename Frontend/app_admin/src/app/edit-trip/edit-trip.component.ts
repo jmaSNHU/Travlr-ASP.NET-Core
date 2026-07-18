@@ -58,16 +58,16 @@ export class EditTripComponent implements OnInit {
           // populate record into the form
           // updated with correct date format for datepicker
           this.editForm.patchValue({
-            _id: value[0]._id,
-            code: value[0].code,
-            name: value[0].name,
-            length: value[0].length,
+            _id: value._id,
+            code: value.code,
+            name: value.name,
+            length: value.length,
             // formats the date as ISO string w/ yyyy-MM-dd format
-            start: formatDate(value[0].start, 'yyyy-MM-dd', 'en-US'),
-            resort: value[0].resort,
-            perPerson: value[0].perPerson, 
-            image: value[0].image,
-            description: value[0].description
+            start: formatDate(value.start, 'yyyy-MM-dd', 'en-US'),
+            resort: value.resort,
+            perPerson: value.perPerson, 
+            image: value.image,
+            description: value.description
           });
           if (!value) {
             this.message = 'No Trip Retrieved!';
