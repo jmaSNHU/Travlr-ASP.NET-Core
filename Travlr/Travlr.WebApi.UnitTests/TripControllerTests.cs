@@ -30,6 +30,8 @@ namespace Travlr.WebApi.UnitTests
             _controller = new TripsController(_mockTripsService.Object);
         }
 
+        #region Test GET ALL
+
         [Fact]
         public async Task TestGetAllExpectOkAndTripsList()
         {
@@ -40,6 +42,8 @@ namespace Travlr.WebApi.UnitTests
                 new TripDto {Code = "B", Name = "B Trip", Description = "B Trip Desc.", Length = "2 days", Resort = "B resort", Image = "b_img.jpg", PerPerson = "2300.00", Start = new DateTime()}
             };
 
+            // mocks the trip service dependency to returns the expected result
+            // note: the trip service is not what's being tested here
             _mockTripsService
                 .Setup(s => s.GetAsync())
                 .ReturnsAsync(trips);
@@ -52,13 +56,17 @@ namespace Travlr.WebApi.UnitTests
             var returnedTrips = Assert.IsAssignableFrom<IEnumerable<TripDto>>(resultOK.Value);
             Assert.Equal(2, returnedTrips.Count()); // expect 2 trips in the list
         }
+        #endregion
 
+        #region Test GET
         [Fact]
         public async Task TestGetExpectOkAndSingleTrip()
         {
             // Arrange
             var trip = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
 
+            // TripService.GetAsync("A") 
+            // returns the trip object declared above
             _mockTripsService
                 .Setup(s => s.GetAsync("A"))
                 .ReturnsAsync(trip);
@@ -78,6 +86,7 @@ namespace Travlr.WebApi.UnitTests
             // Arrange
             var trip = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
 
+            // mock TripService.GetAsync()
             _mockTripsService
                 .Setup(s => s.GetAsync("B"))
                 .ReturnsAsync(trip);
@@ -88,13 +97,16 @@ namespace Travlr.WebApi.UnitTests
             // Assert
             var resultOk = Assert.IsType<NotFoundResult>(actionResult.Result);
         }
+        #endregion 
 
+        #region Test CREATE
         [Fact]
         public async Task TestCreateTrip()
         {
             // Arrange
             var newTrip = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
 
+            // mock TripService.CreateAsync()
             _mockTripsService
                 .Setup(s => s.CreateAsync(newTrip))
                 .Returns(Task.CompletedTask);
@@ -116,13 +128,17 @@ namespace Travlr.WebApi.UnitTests
             Assert.Equal("a_img.jpg", createdTrip.Image);
             Assert.Equal("1200.00", createdTrip.PerPerson);
         }
+        #endregion
+
+        #region Test UPDATE
 
         [Fact]
         public async Task TestUpdateTrip()
         {
             // Arrange
-            // Arrange
             var tripToUpdate = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+            
+            // mock TripService.UpdateAsync()
             _mockTripsService
                 .Setup(s => s.UpdateAsync("A", tripToUpdate))
                 .ReturnsAsync(tripToUpdate);
@@ -142,6 +158,11 @@ namespace Travlr.WebApi.UnitTests
             // Arrange
             var tripToUpdate = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
 
+            // mock not necessary
+            _mockTripsService
+                .Setup(s => s.UpdateAsync("A", tripToUpdate))
+                .ReturnsAsync(tripToUpdate);
+
             // Act
             tripToUpdate.Name = "AAA Trip";
             // try to update a non-existant trip
@@ -156,14 +177,21 @@ namespace Travlr.WebApi.UnitTests
             Assert.IsType<NotFoundResult>(actionResult.Result);
         }
 
+        #endregion
+
+        #region Test DELETE
+
         [Fact]
         public async Task TestDeleteTrip()
         {
             // Arrange
             var tripToRemove = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+
+            // mock TripService.GetAsync() - used by controller Delete method
             _mockTripsService
                 .Setup(s => s.GetAsync(tripToRemove.Code))
                 .ReturnsAsync(tripToRemove);
+            // mock TripService.RemoveAsync() 
             _mockTripsService
                 .Setup(s => s.RemoveAsync(tripToRemove.Code))
                 .Returns(Task.CompletedTask);
@@ -182,6 +210,9 @@ namespace Travlr.WebApi.UnitTests
             _mockTripsService
                 .Setup(s => s.GetAsync("A"))
                 .ReturnsAsync((TripDto)null!);
+            _mockTripsService
+                .Setup(s => s.RemoveAsync("A"))
+                .Returns(Task.CompletedTask);
 
             // Act
             var result = await _controller.Delete("A");
@@ -189,5 +220,6 @@ namespace Travlr.WebApi.UnitTests
             //Assert
             Assert.IsType<NotFoundResult>(result);
         }
+        #endregion
     }
 }

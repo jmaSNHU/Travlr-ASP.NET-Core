@@ -53,6 +53,7 @@ namespace Travlr.WebApi.Models
 
         // __v field is  MongoDB's document version key
         [BsonElement("__v")]
+        [BsonIgnoreIfNull]
         public int Version { get; set; }
     }
 }
