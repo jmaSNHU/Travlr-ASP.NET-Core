@@ -47,20 +47,15 @@ export class LoginComponent implements OnInit {
       email: this.credentials.email,
     } as User;
 
-    // console.log('LoginComponent::doLogin');
-    // console.log(this.credentials);
-
     this.authenticationService.login(newUser, this.credentials.password);
 
     if(this.authenticationService.isLoggedIn())
     {
-      // console.log('Router::Direct');
       this.router.navigate(['']);
     } else {
       var timer = setTimeout(() => {
         if(this.authenticationService.isLoggedIn())
         {
-          // console.log('Router::Pause');
           this.router.navigate(['']);
         }},3000);
     }

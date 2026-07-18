@@ -21,20 +21,17 @@ export class TripDataService {
 
   // call to /login endpoint, returns JWT
   login(user: User, passwd: string) : Observable<AuthResponse> {
-    // console.log('Inside TripDataService::login');
     return this.handleAuthAPICall('login', user, passwd);
   }
 
   // call to /register endpoint, creates user and returns JWT
   register(user: User, passwd: string) : Observable<AuthResponse> {
-    // console.log('Inside TripDateService::register');
     return this.handleAuthAPICall('register', user, passwd);
   }
 
   // helper method to handle login and register methods
   handleAuthAPICall(endpoint: string, user: User, passwd: string) :
   Observable<AuthResponse> {
-    // console.log('Inside TripDateService::handleAuthAPICall');
     let formData = {
       name: user.name,
       email: user.email,
@@ -45,30 +42,18 @@ export class TripDataService {
   }
 
   getTrips() : Observable<Trip[]> {
-    // debug
-    // console.log('Inside TripDataService::getTrips');
-    
     return this.http.get<Trip[]>(this.url);
   }
 
   addTrip(formData: Trip) : Observable<Trip> {
-    // debug
-    // console.log('Inside TripDataService::addTrip');
-
     return this.http.post<Trip>(this.url, formData);
   }
 
   getTrip(tripCode: string) : Observable<Trip[]> {
-    // debug
-    // console.log('Inside TripDataService::getTrip');
-
     return this.http.get<Trip[]>(this.url + '/' + tripCode);
   }
 
   updateTrip(formData: Trip) : Observable<Trip> {
-    // debug
-    // console.log('Inside TripDateService::updateTrip');
-
     return this.http.put<Trip>(this.url + '/' + formData.code, formData);
   }
 }

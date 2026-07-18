@@ -12,7 +12,6 @@ const options = {
 
 // GET travel view
 const travel = async function(req, res, next) {
-    // console.log('TRAVEL CONTROLLER FETCHING');
     await fetch(tripsEndpoint, options)
         .then((res) => res.json())
         .then((json) => {

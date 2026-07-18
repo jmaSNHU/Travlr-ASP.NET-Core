@@ -15,8 +15,8 @@ var contactRouter = require('./app_server/routes/contact');
 
 var handlebars = require('hbs');
 
-// TODO: this is temporary fix to get work the 
-// self-signed SSL certificate. Not for production.
+// Note: this is for development on a local machine w/ 
+// self-signed SSL certificates. Not for production.
 if (process.env.NODE_ENV !== 'production') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 }

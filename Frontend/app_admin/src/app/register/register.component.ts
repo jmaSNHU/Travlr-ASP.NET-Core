@@ -58,13 +58,11 @@ export class RegisterComponent implements OnInit {
     // auth service should log the user in if registration successful
     if(this.authenticationService.isRegistered())
     {
-      // console.log('Router::Direct');
       this.router.navigate(['/login']);
     } else {
       var timer = setTimeout(() => {
         if(this.authenticationService.isRegistered())
         {
-          // console.log('Router::Pause');
           this.router.navigate(['/login']);
         }},3000);
     }
