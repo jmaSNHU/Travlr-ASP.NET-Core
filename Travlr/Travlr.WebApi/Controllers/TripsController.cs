@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Travlr.WebApi.Dtos;
 using Travlr.WebApi.Services;
 
@@ -7,6 +8,9 @@ namespace Travlr.WebApi.Controllers
     /// <summary>
     /// Defines GetAll, Get, Create, Update and Delete actions
     /// for the /trips endpoints
+    /// 
+    /// [Authorized]
+    /// Create/Update/Delete require a bearer token
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -54,6 +58,7 @@ namespace Travlr.WebApi.Controllers
         /// </summary>
         /// <param name="trip"></param>
         /// <returns>HTTP status 201 Created and the newly created TripDto</returns>
+        [Authorize] // requires authentication
         [HttpPost]
         public async Task<ActionResult<TripDto>> Create([FromForm] TripDto trip)
         {
@@ -62,7 +67,7 @@ namespace Travlr.WebApi.Controllers
             // uses the [GET] method to fetch the newly created Trip
             return CreatedAtAction(nameof(Get), new { code = trip.Code }, trip);
         }
-        
+
         /// <summary>
         /// Updates an existing Trip by Code
         /// Returns status 200 after successful update
@@ -70,6 +75,7 @@ namespace Travlr.WebApi.Controllers
         /// <param name="code"></param>
         /// <param name="trip"></param>
         /// <returns>HTTP status 200 OK and the update TripDto</returns>
+        [Authorize] // requires authentication
         [HttpPut("{code}")]
         public async Task<ActionResult<TripDto>> Update(string code,[FromForm] TripDto trip)
         {
@@ -88,6 +94,7 @@ namespace Travlr.WebApi.Controllers
         /// </summary>
         /// <param name="code"></param>
         /// <returns>HTTP status 204 No Content</returns>
+        [Authorize] // requires authentication
         [HttpDelete("{code}")]
         public async Task<ActionResult> Delete(string code)
         {
