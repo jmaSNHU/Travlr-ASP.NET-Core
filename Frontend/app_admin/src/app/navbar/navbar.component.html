@@ -12,7 +12,7 @@ aria-expanded="false" aria-label="Toggle navigation">
 sr-only ">(current)</span></a>
         </div>
     </div>
-    <div class="navbar-end ">
+    <!-- <div class="navbar-end ">
         <a class="nav-item" routerLink="login" *ngIf="!isLoggedIn()">
         <span class="has-icon-left">Log In</span>
         </a>
@@ -20,5 +20,13 @@ sr-only ">(current)</span></a>
 *ngIf="isLoggedIn()">
         <span class="has-icon-left ">Log Out</span>
         </a>
+    </div> -->
+    <div class="auth-buttons">
+        <ng-container *ngIf="!isLoggedIn()">
+            <button class="btn btn-primary" routerLink="login">Login</button>
+            <button class="btn btn-secondary" routerLink="register">Register</button>
+        </ng-container>
+  
+        <button class="btn btn-primary" *ngIf="isLoggedIn()" (click)="onLogout()">Logout</button>
     </div>
 </nav>
