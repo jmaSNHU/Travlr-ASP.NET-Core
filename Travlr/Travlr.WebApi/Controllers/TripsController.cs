@@ -34,17 +34,17 @@ namespace Travlr.WebApi.Controllers
         }
 
         /// <summary>
-        /// GET /trips/{code}
-        /// Takes a unique trip code a parameter and returns
+        /// GET /trips/{id}
+        /// Takes a unique trip id as a parameter and returns
         /// the matching trip objects, if found
         /// Otherwise, returns status code 404: Not Found
         /// </summary>
-        /// <param name="code"></param>
-        /// <returns>HTTP status 200 OK and a TripDto object with matching Code</returns>
-        [HttpGet("{code}")]
-        public async Task<ActionResult<TripDto?>> Get(string code)
+        /// <param name="id"></param>
+        /// <returns>HTTP status 200 OK and a TripDto object with matching Id</returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TripDto?>> Get(string id)
         {
-            var trip = await _tripsService.GetAsync(code);
+            var trip = await _tripsService.GetAsync(id);
             if (trip == null)
             {
                 return NotFound();
@@ -65,21 +65,21 @@ namespace Travlr.WebApi.Controllers
             await _tripsService.CreateAsync(trip);
             // produces a 201 created response
             // uses the [GET] method to fetch the newly created Trip
-            return CreatedAtAction(nameof(Get), new { code = trip.Code }, trip);
+            return CreatedAtAction(nameof(Get), new { id = trip.Id }, trip);
         }
 
         /// <summary>
-        /// Updates an existing Trip by Code
+        /// Updates an existing Trip by Id
         /// Returns status 200 after successful update
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="id"></param>
         /// <param name="trip"></param>
         /// <returns>HTTP status 200 OK and the update TripDto</returns>
         [Authorize] // requires authentication
-        [HttpPut("{code}")]
-        public async Task<ActionResult<TripDto>> Update(string code,[FromBody] TripDto trip)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<TripDto>> Update(string id,[FromBody] TripDto trip)
         {
-            var updatedTrip = await _tripsService.UpdateAsync(code, trip);
+            var updatedTrip = await _tripsService.UpdateAsync(id, trip);
 
             if (updatedTrip == null)
             {
@@ -90,15 +90,15 @@ namespace Travlr.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes an existing Trip by Code
+        /// Deletes an existing Trip by Id
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="id"></param>
         /// <returns>HTTP status 204 No Content</returns>
         [Authorize] // requires authentication
-        [HttpDelete("{code}")]
-        public async Task<ActionResult> Delete(string code)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
         {
-            var trip = await _tripsService.GetAsync(code);
+            var trip = await _tripsService.GetAsync(id);
 
             // return NotFound result if trip doesn't exist
             if (trip == null)
@@ -106,7 +106,7 @@ namespace Travlr.WebApi.Controllers
                 return NotFound();
             }
 
-            await _tripsService.RemoveAsync(code);
+            await _tripsService.RemoveAsync(id);
             return NoContent(); // returns NoContent result after deletion
         }
     }

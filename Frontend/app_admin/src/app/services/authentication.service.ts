@@ -75,7 +75,6 @@ export class AuthenticationService {
       .subscribe({
         next: (value: any) => {
           if (value) {
-            console.log(value);
             this.authResp = value;
             this.saveToken(this.authResp.token);
           }
@@ -94,7 +93,6 @@ export class AuthenticationService {
       .subscribe({
         next: (value: any) => {
           if (value) {
-            console.log(value);
             this.authResp = value;
             this.saveToken(this.authResp.token);
           }

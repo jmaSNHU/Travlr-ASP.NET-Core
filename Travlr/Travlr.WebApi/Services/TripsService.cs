@@ -27,29 +27,34 @@ namespace Travlr.WebApi.Services
             return trips.ToDtoList();
         }
 
-        // find and returns a single trip by (unique) code
-        public async Task<TripDto?> GetAsync(string code)
+        // find and returns a single trip by Id
+        public async Task<TripDto?> GetAsync(string id)
         {
-            var trip = await _tripsCollection.Find(x => x.Code == code).FirstOrDefaultAsync();
+            var trip = await _tripsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
             return trip.ToDto();
         }
 
         // saves a newly created trip to the database
-        public async Task CreateAsync(TripDto trip) =>
-            await _tripsCollection.InsertOneAsync(trip.ToEntity());
+        public async Task CreateAsync(TripDto trip)
+        {
+            var tripEntity = trip.ToEntity();
+            await _tripsCollection.InsertOneAsync(tripEntity);
+            // have to save the Id back to DTO for controller to return Get(Id) 
+            trip.Id = tripEntity.Id;
+        }
 
         // updates an existing trip
-        public async Task<TripDto?> UpdateAsync(string code, TripDto trip)
+        public async Task<TripDto?> UpdateAsync(string id, TripDto trip)
         {
-            var result = await _tripsCollection.ReplaceOneAsync(x => x.Code == code, trip.ToEntity());
+            var result = await _tripsCollection.ReplaceOneAsync(x => x.Id == id, trip.ToEntity());
             if (result.MatchedCount != 0)
-                return await GetAsync(trip.Code);
+                return await GetAsync(trip.Id);
             else
                 return null;
         }
 
         // deletes an existing trip
-        public async Task RemoveAsync(string code) 
-            => await _tripsCollection.DeleteOneAsync(x => x.Code == code);
+        public async Task RemoveAsync(string id) 
+            => await _tripsCollection.DeleteOneAsync(x => x.Id == id);
     }
 }
