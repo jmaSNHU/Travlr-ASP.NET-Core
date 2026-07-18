@@ -63,6 +63,24 @@ builder.Services.AddAuthentication(options =>
 // register implementation of ITripsService as a Singleton service
 builder.Services.AddSingleton<ITripsService, TripsService>();
 
+// Cross Origin Resource Sharing to allow the frontend to
+// send requests to our API
+
+var allowTravlrFrontendOrigins = "_travlrFrontendOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowTravlrFrontendOrigins,
+                      policy =>
+                      {
+                          // TODO: refactor URLs to appsettings.json
+                          // these are the Node.js and App Admin URLs
+                          policy.WithOrigins("http://localhost:3000", "http://localhost:4200") 
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -80,6 +98,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(allowTravlrFrontendOrigins);
 
 app.UseAuthorization();
 

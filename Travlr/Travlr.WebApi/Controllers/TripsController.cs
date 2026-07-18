@@ -60,7 +60,7 @@ namespace Travlr.WebApi.Controllers
         /// <returns>HTTP status 201 Created and the newly created TripDto</returns>
         [Authorize] // requires authentication
         [HttpPost]
-        public async Task<ActionResult<TripDto>> Create([FromForm] TripDto trip)
+        public async Task<ActionResult<TripDto>> Create([FromBody] TripDto trip)
         {
             await _tripsService.CreateAsync(trip);
             // produces a 201 created response
@@ -77,7 +77,7 @@ namespace Travlr.WebApi.Controllers
         /// <returns>HTTP status 200 OK and the update TripDto</returns>
         [Authorize] // requires authentication
         [HttpPut("{code}")]
-        public async Task<ActionResult<TripDto>> Update(string code,[FromForm] TripDto trip)
+        public async Task<ActionResult<TripDto>> Update(string code,[FromBody] TripDto trip)
         {
             var updatedTrip = await _tripsService.UpdateAsync(code, trip);
 
