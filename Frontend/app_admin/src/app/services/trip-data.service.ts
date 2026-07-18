@@ -16,7 +16,7 @@ export class TripDataService {
     private http: HttpClient,
     @Inject(BROWSER_STORAGE) private storage: Storage
   ) { }
-  baseUrl = 'https://localhost:7277/api';
+  baseUrl = 'https://localhost:7277/api/auth';
   url = 'https://localhost:7277/api/trips';
 
   // call to /login endpoint, returns JWT

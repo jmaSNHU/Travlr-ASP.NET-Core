@@ -23,7 +23,7 @@ namespace Travlr.WebApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
@@ -47,7 +47,7 @@ namespace Travlr.WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm] LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
