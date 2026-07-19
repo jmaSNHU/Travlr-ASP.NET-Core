@@ -4,6 +4,7 @@ using Travlr.WebApi.Mappings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Travlr.WebApi.Repository;
 
 namespace Travlr.WebApi.Services
 {
@@ -11,50 +12,53 @@ namespace Travlr.WebApi.Services
     /// Implements CRUD methods defined by ITripsService
     /// </summary>
     /// <param name="travlrDatabaseSettings"></param>
-    public class TripsService(IOptions<TravlrDatabaseSettings> travlrDatabaseSettings) : ITripsService
+    public class TripsService : ITripsService
     {
-        // use the MongoClient to open a connection using the TravlrDatabaseSettings
-        // get the Trips collection from the Travlr database
-        private readonly IMongoCollection<Trip> _tripsCollection =
-            new MongoClient(travlrDatabaseSettings.Value.ConnectionString)
-            .GetDatabase(travlrDatabaseSettings.Value.DatabaseName)
-            .GetCollection<Trip>(travlrDatabaseSettings.Value.TripsCollectionName);
+        private readonly IRepository<Trip> _repository;
 
-        // returns all trips
-        public async Task<List<TripDto>> GetAsync()
+        public TripsService(IRepository<Trip> repository)
         {
-            var trips = await _tripsCollection.Find(_ => true).ToListAsync();
+            _repository = repository;
+        }
+
+
+
+        // returns a list of all trip DTOs
+        public async Task<IEnumerable<TripDto>> GetTripsAsync()
+        {
+            var trips = await _repository.GetAsync();
             return trips.ToDtoList();
         }
 
         // find and returns a single trip by Id
-        public async Task<TripDto?> GetAsync(string id)
+        public async Task<TripDto?> GetTripAsync(string id)
         {
-            var trip = await _tripsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            Trip trip = await _repository.GetAsync(id);
             return trip.ToDto();
         }
 
         // saves a newly created trip to the database
-        public async Task CreateAsync(TripDto trip)
+        public async Task CreateTripAsync(TripDto trip)
         {
             var tripEntity = trip.ToEntity();
-            await _tripsCollection.InsertOneAsync(tripEntity);
+            await _repository.CreateAsync(tripEntity);
             // have to save the Id back to DTO for controller to return Get(Id) 
             trip.Id = tripEntity.Id;
         }
 
         // updates an existing trip
-        public async Task<TripDto?> UpdateAsync(string id, TripDto trip)
+        public async Task<TripDto?> UpdateTripAsync(string id, TripDto trip)
         {
-            var result = await _tripsCollection.ReplaceOneAsync(x => x.Id == id, trip.ToEntity());
-            if (result.MatchedCount != 0)
-                return await GetAsync(trip.Id);
-            else
-                return null;
+            var tripEntity = await _repository.UpdateAsync(id, trip.ToEntity());
+            if (tripEntity != null)
+            {
+                return tripEntity.ToDto();
+            }  
+            return null;
         }
 
         // deletes an existing trip
-        public async Task RemoveAsync(string id) 
-            => await _tripsCollection.DeleteOneAsync(x => x.Id == id);
+        public async Task RemoveTripAsync(string id) 
+            => await _repository.RemoveAsync(id);
     }
 }

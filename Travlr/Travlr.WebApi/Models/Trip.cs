@@ -7,12 +7,9 @@ namespace Travlr.WebApi.Models
     /// <summary>
     /// Trip Model mapped to Document fields in the MongoDB Trips collection
     /// </summary>
-    public class Trip
+    public class Trip : BaseEntity
     {
-        // Bson ID may be null on create
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; } = null!;
+        // inherits Id from the basetype
 
         // These properties are required to create a new document
         [BsonRequired]

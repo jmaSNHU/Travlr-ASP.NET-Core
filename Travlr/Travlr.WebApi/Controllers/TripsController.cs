@@ -29,7 +29,7 @@ namespace Travlr.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TripDto>>> GetAll()
         {
-            var trips = await _tripsService.GetAsync();
+            var trips = await _tripsService.GetTripsAsync();
             return Ok(trips);
         }
 
@@ -44,7 +44,7 @@ namespace Travlr.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TripDto?>> Get(string id)
         {
-            var trip = await _tripsService.GetAsync(id);
+            var trip = await _tripsService.GetTripAsync(id);
             if (trip == null)
             {
                 return NotFound();
@@ -62,7 +62,7 @@ namespace Travlr.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<TripDto>> Create([FromBody] TripDto trip)
         {
-            await _tripsService.CreateAsync(trip);
+            await _tripsService.CreateTripAsync(trip);
             // produces a 201 created response
             // uses the [GET] method to fetch the newly created Trip
             return CreatedAtAction(nameof(Get), new { id = trip.Id }, trip);
@@ -79,7 +79,7 @@ namespace Travlr.WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<TripDto>> Update(string id,[FromBody] TripDto trip)
         {
-            var updatedTrip = await _tripsService.UpdateAsync(id, trip);
+            var updatedTrip = await _tripsService.UpdateTripAsync(id, trip);
 
             if (updatedTrip == null)
             {
@@ -98,7 +98,7 @@ namespace Travlr.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
-            var trip = await _tripsService.GetAsync(id);
+            var trip = await _tripsService.GetTripAsync(id);
 
             // return NotFound result if trip doesn't exist
             if (trip == null)
@@ -106,7 +106,7 @@ namespace Travlr.WebApi.Controllers
                 return NotFound();
             }
 
-            await _tripsService.RemoveAsync(id);
+            await _tripsService.RemoveTripAsync(id);
             return NoContent(); // returns NoContent result after deletion
         }
     }
