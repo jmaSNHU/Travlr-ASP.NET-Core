@@ -12,11 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-// register configuration from appsettings.json 
-// that binds to TravlrDatabaseSettings class
-builder.Services.Configure<TravlrDatabaseSettings>(
-    builder.Configuration.GetSection("TravlrDatabase"));
-
 // load JWT settings from appsettings.json
 var mongoDbSettings = builder.Configuration.GetSection("TravlrDatabase");
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
