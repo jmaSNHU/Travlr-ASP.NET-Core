@@ -12,6 +12,7 @@ A repository for the Travlr application, ported to an ASP.NET Core Web API
 ## Install Node.js v20.20.2
 
 ```nvm install 20.20.2```
+
 ```nvm use 20.20.2```
 
 ## Install Angular v17.3.17
@@ -31,6 +32,7 @@ Run or deploy from Visual Studio
 ## Node.js Customer-Facing Frontend
 CD into the Frontend project directory:
 ```set DEBUG=Frontend:*```
+
 ```npm start```
 
 ## Angular App Admin
