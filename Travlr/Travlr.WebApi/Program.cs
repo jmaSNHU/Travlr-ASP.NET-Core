@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Text;
 using Travlr.WebApi.Models;
+using Travlr.WebApi.Repository;
 using Travlr.WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,9 +61,19 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+var mongoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
+var mongoDatabaseName = builder.Configuration["TravlrDatabase:DatabaseName"];
+var tripsCollection = builder.Configuration["TravlrDatabase:TripsCollectionName"];
 
-// register implementation of ITripsService as a Singleton service
-builder.Services.AddSingleton<ITripsService, TripsService>();
+builder.Services.AddSingleton<IMongoClient>(s => new MongoClient(mongoConnectionString));
+builder.Services.AddScoped(s => s.GetRequiredService<IMongoClient>().GetDatabase(mongoDatabaseName));
+
+// Register repositories and services
+builder.Services.AddScoped<IRepository<Trip>>(provider =>
+    new GenericRepository<Trip>(provider.GetRequiredService<IMongoDatabase>(), "trips"));
+
+// register implementation of ITripsService as a Scoped service
+builder.Services.AddScoped<ITripsService, TripsService>();
 
 // Cross Origin Resource Sharing to allow the frontend to
 // send requests to our API
@@ -83,7 +95,6 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -94,7 +105,6 @@ app.UseAuthorization();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();

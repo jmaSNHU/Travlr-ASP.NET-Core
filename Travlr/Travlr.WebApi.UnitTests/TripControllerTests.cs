@@ -45,7 +45,7 @@ namespace Travlr.WebApi.UnitTests
             // mocks the trip service dependency to returns the expected result
             // note: the trip service is not what's being tested here
             _mockTripsService
-                .Setup(s => s.GetAsync())
+                .Setup(s => s.GetTripsAsync())
                 .ReturnsAsync(trips);
 
             // Act
@@ -68,7 +68,7 @@ namespace Travlr.WebApi.UnitTests
             // TripService.GetAsync("A") 
             // returns the trip object declared above
             _mockTripsService
-                .Setup(s => s.GetAsync("A"))
+                .Setup(s => s.GetTripAsync("A"))
                 .ReturnsAsync(trip);
 
             // Act
@@ -88,7 +88,7 @@ namespace Travlr.WebApi.UnitTests
 
             // mock TripService.GetAsync()
             _mockTripsService
-                .Setup(s => s.GetAsync("B"))
+                .Setup(s => s.GetTripAsync("B"))
                 .ReturnsAsync(trip);
 
             // Act
@@ -104,11 +104,11 @@ namespace Travlr.WebApi.UnitTests
         public async Task TestCreateTrip()
         {
             // Arrange
-            var newTrip = new TripDto { Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
+            var newTrip = new TripDto { Id = "test", Code = "A", Name = "A Trip", Description = "A Trip Desc.", Length = "1 day", Resort = "A resort", Image = "a_img.jpg", PerPerson = "1200.00", Start = new DateTime() };
 
             // mock TripService.CreateAsync()
             _mockTripsService
-                .Setup(s => s.CreateAsync(newTrip))
+                .Setup(s => s.CreateTripAsync(newTrip))
                 .Returns(Task.CompletedTask);
 
             // Act
@@ -117,7 +117,7 @@ namespace Travlr.WebApi.UnitTests
             // Assert
             var resultCreated = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
             Assert.Equal(nameof(_controller.Get), resultCreated.ActionName);
-            Assert.Equal("A", resultCreated.RouteValues?["code"]);
+            Assert.Equal("test", resultCreated.RouteValues?["id"]);
 
             var createdTrip = Assert.IsType<TripDto>(resultCreated.Value);
             Assert.Equal("A", createdTrip.Code);
@@ -140,7 +140,7 @@ namespace Travlr.WebApi.UnitTests
             
             // mock TripService.UpdateAsync()
             _mockTripsService
-                .Setup(s => s.UpdateAsync("A", tripToUpdate))
+                .Setup(s => s.UpdateTripAsync("A", tripToUpdate))
                 .ReturnsAsync(tripToUpdate);
 
             // Act
@@ -160,7 +160,7 @@ namespace Travlr.WebApi.UnitTests
 
             // mock not necessary
             _mockTripsService
-                .Setup(s => s.UpdateAsync("A", tripToUpdate))
+                .Setup(s => s.UpdateTripAsync("A", tripToUpdate))
                 .ReturnsAsync(tripToUpdate);
 
             // Act
@@ -189,11 +189,11 @@ namespace Travlr.WebApi.UnitTests
 
             // mock TripService.GetAsync() - used by controller Delete method
             _mockTripsService
-                .Setup(s => s.GetAsync(tripToRemove.Code))
+                .Setup(s => s.GetTripAsync(tripToRemove.Code))
                 .ReturnsAsync(tripToRemove);
             // mock TripService.RemoveAsync() 
             _mockTripsService
-                .Setup(s => s.RemoveAsync(tripToRemove.Code))
+                .Setup(s => s.RemoveTripAsync(tripToRemove.Code))
                 .Returns(Task.CompletedTask);
 
             // Act
@@ -208,10 +208,10 @@ namespace Travlr.WebApi.UnitTests
         {
             // Arrange
             _mockTripsService
-                .Setup(s => s.GetAsync("A"))
+                .Setup(s => s.GetTripAsync("A"))
                 .ReturnsAsync((TripDto)null!);
             _mockTripsService
-                .Setup(s => s.RemoveAsync("A"))
+                .Setup(s => s.RemoveTripAsync("A"))
                 .Returns(Task.CompletedTask);
 
             // Act

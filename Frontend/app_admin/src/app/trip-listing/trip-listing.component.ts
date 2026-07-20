@@ -23,9 +23,7 @@ export class TripListingComponent implements OnInit {
     private tripDataService: TripDataService, 
     private router: Router,
     private authenticationService: AuthenticationService
-  ) {
-    console.log('trip-listing constructor');
-  }
+  ) { }
 
   public addTrip(): void {
     this.router.navigate(['add-trip']);
@@ -51,7 +49,6 @@ export class TripListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.getStuff();
   }
 

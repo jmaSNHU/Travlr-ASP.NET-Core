@@ -27,20 +27,18 @@ export class EditTripComponent implements OnInit {
 
   ngOnInit(): void {
     // retrieve cached trip ID
-    let tripCode = localStorage.getItem("tripCode");
-    if (!tripCode) {
-      alert("Something went wrong, couldn't find where I stashed the tripCode!");
+    let tripId = localStorage.getItem("tripId");
+    if (!tripId) {
+      alert("Something went wrong, couldn't find where I stashed the tripId!");
       this.router.navigate(['']);
 
       return;
     }
 
-    console.log('EditTripComponent::ngOnInit');
-    console.log('tripCode: ' + tripCode);
 
     this.editForm = this.formBuilder.group({
-    _id: [],
-    code: [tripCode, Validators.required],
+    _id: [tripId],
+    code: ['', Validators.required],
     name: ['', Validators.required],
     length: ['', Validators.required],
     start: ['', Validators.required],
@@ -50,7 +48,7 @@ export class EditTripComponent implements OnInit {
     description: ['', Validators.required]
     })
 
-    this.tripDataService.getTrip(tripCode)
+    this.tripDataService.getTrip(tripId)
       .subscribe({
         next: (value: any) => {
           this.trip = value;
@@ -72,7 +70,7 @@ export class EditTripComponent implements OnInit {
           if (!value) {
             this.message = 'No Trip Retrieved!';
           } else {
-            this.message = 'Trip: ' + tripCode + ' retrieved';
+            this.message = 'Trip: ' + tripId + ' retrieved';
           }
           console.log(this.message);
         },
@@ -89,7 +87,6 @@ export class EditTripComponent implements OnInit {
       this.tripDataService.updateTrip(this.editForm.value)
         .subscribe({
           next: (value: any) => {
-            console.log(value);
             this.router.navigate(['']);
           },
           error: (error: any) => {

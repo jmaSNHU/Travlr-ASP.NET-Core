@@ -8,10 +8,10 @@ namespace Travlr.WebApi.Services
     /// </summary>
     public interface ITripsService
     {
-        public Task<List<TripDto>> GetAsync();
-        public Task<TripDto?> GetAsync(string code);
-        public Task CreateAsync(TripDto trip);
-        public Task<TripDto?> UpdateAsync(string code,  TripDto trip);
-        public Task RemoveAsync(string code);
+        public Task<IEnumerable<TripDto>> GetTripsAsync();
+        public Task<TripDto?> GetTripAsync(string id);
+        public Task CreateTripAsync(TripDto trip);
+        public Task<TripDto?> UpdateTripAsync(string id,  TripDto trip);
+        public Task RemoveTripAsync(string id);
     }
 }

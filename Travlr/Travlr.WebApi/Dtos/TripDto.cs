@@ -9,7 +9,8 @@ namespace Travlr.WebApi.Dtos
     public class TripDto
     {
         [JsonPropertyName("_id")]
-        public string Id { get; set; } = null!;
+        // id will be null on insert
+        public string? Id { get; set; } = null!;
         public string Code { get; set; } = null!;
 
         public string Name { get; set; } = null!;
