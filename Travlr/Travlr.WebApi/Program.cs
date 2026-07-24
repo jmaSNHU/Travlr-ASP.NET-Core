@@ -17,6 +17,12 @@ var mongoDbSettings = builder.Configuration.GetSection("TravlrDatabase");
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
 // See README on how to configure user secret store
+// Tip: Run the following commands to add JWT secret to user-secrets store:
+// dotnet user-secrets init
+// dotnet user-secrets set "JwtSettings:Secret" "CopyAndPasteYourValidJwtSecretHere"
+// 
+// You can generate a key using openssl with the following command:
+// openssl rand -base64 32
 var jwtSecret = builder.Configuration["JwtSettings:Secret"];
 var key = Encoding.ASCII.GetBytes(jwtSecret!);
 
